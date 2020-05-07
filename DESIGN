@@ -1,0 +1,28 @@
+
+File System Layout:
+
+  - 1MB = 256 pages (4k blocks)
+  - page 0 = bitmaps for pages and inodes
+  - page 1 = version control (copy on write functionality)
+  - page 2 = inodes
+  - page 3-256 = data blocks
+
+Version update function locations:
+  - storage_mknod();
+  - storage_write();
+  - storage_truncate();
+  - storage_rename();
+  - storage_link();
+  - storage_symlink();
+  - storage_unlink();
+  - storage_set_time();
+  - nufs_chmod();
+
+Basic plan for garbage collection
+  - go through every single valid version of filesystem
+  - compile a massive set of their inums that they reference
+  - sort the set if you can, maybe qsort it or something
+  - loop through ii = 0 ... INODE_COUNT 
+    - if ii NOT IN set
+      - inode_free(ii)
+  - OOOH GOOD IDEA IS TO USE A BITMAP INSTEAD OF SOME ARRAY SET SORT STRUCTURE!!!!!
